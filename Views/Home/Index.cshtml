@@ -1,0 +1,82 @@
+﻿@model List<website_airQuality.Models.ViewData>
+
+
+@{
+    ViewData["Title"] = "مخطط جودة الهواء";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div id="cont">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   
+    <canvas id="Chart-2" height="250" class="Chart"></canvas><br />
+    <canvas id="Chart-3" height="250" class="Chart"></canvas><br />
+    <canvas id="Chart-4" height="250" class="Chart"></canvas><br />
+    <canvas id="Chart-5" height="250" class="Chart"></canvas><br />
+    <canvas id="Chart-0" height="250" class="Chart"></canvas><br />
+    <canvas id="Chart-1" height="250" class="Chart"></canvas><br />
+
+    @if (Model!=null && Model.Count>0)
+    {
+
+        <script>
+            let Co2 = @Html.Raw(Json.Serialize(Model.Select(x => x.Co2)));
+            console.log(Co2);
+            let O3 = @Html.Raw(Json.Serialize(Model.Select(x => x.O3)));
+            let Tvoc = @Html.Raw(Json.Serialize(Model.Select(x => x.Tvoc)));
+            let Temp = @Html.Raw(Json.Serialize(Model.Select(x => x.Temp)));
+            let Humidity = @Html.Raw(Json.Serialize(Model.Select(x => x.Humd)));
+            let Dust = @Html.Raw(Json.Serialize(Model.Select(x => x.Dust)));
+            var Dates;
+
+            Dates = @Html.Raw(Json.Serialize(Model.Select(x => x.time.ToString("dd-MM hh:mm:tt"))));
+
+
+
+            const datasets = [
+                { label: 'ثنائي اوكسيد الكاربون' + ' - CO2', data: Co2, borderColor: 'red' },
+                { label: 'طبقة الاوزون' + ' - O3 ', data: O3, borderColor: 'green' },
+                { label: 'جودة الهواء' + ' - Tvoc', data: Tvoc, borderColor: 'blue' },
+                { label: 'درجة الحرارة' + ' - C°', data: Temp, borderColor: 'orange' },
+                { label: 'الرطوبة' + ' - gm/m^3', data: Humidity, borderColor: 'rgb(20, 202, 218)' },
+                { label: 'كمية التراب', data: Dust, borderColor: 'brown' }
+            ];
+
+            datasets.forEach((dataset, index) => {
+                const chartData = {
+                    labels: Dates,
+                    datasets: [dataset]
+                };
+
+                const ctx = document.getElementById(`Chart-${index}`).getContext('2d');
+                const date = new Date();
+                let day = date.getDate();
+                let month = date.getMonth() + 1;
+                let year = date.getFullYear();
+                let currentDate = `${day} - ${month}`;
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                        }
+                    }
+                });
+            });
+
+        </script>
+
+    }
+
+
+</div>
+
+        <br />
+       
