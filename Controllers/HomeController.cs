@@ -39,7 +39,7 @@ namespace website_airQuality.Controllers
                             Temp = Convert.ToInt32(tempdata[1]),
                             Tvoc = Convert.ToInt32(tempdata[2]),
                             Co2 = Convert.ToInt32(tempdata[3]),
-                            Dust = Convert.ToInt32(tempdata[4]),
+                            Dust = Convert.ToDouble(tempdata[4]),
                             O3 = Convert.ToInt32(tempdata[5]),
 
                         }
